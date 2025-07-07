@@ -1,0 +1,17 @@
+.PageProImgContainer {
+    width: 500px;
+    border: solid 1px;
+    margin-right: 150px;
+
+    picture {
+        display: block;
+        width: 100%;
+    }
+
+    img {
+        width: 100%;
+        height: auto;         // ← Esto hace que se mantenga la proporción
+        object-fit: contain;  // No distorsiona la imagen
+        display: block;
+    }
+}

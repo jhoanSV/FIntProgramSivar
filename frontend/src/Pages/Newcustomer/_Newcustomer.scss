@@ -1,0 +1,16 @@
+._DataInputs{
+    display: flex;
+    flex-direction: column;
+}
+
+._column1Customer {
+    width: 50%;
+}
+
+._column2Customer {
+    width: 50%;
+    
+    input {
+        width: 90%;
+    }
+}
