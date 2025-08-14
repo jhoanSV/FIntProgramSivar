@@ -1,4 +1,4 @@
-const API_INT = 'http://192.168.1.110:5000/int';
+const API_INT = 'http://192.168.1.111:5000/int';
 
 export const ClientList = async() => {
     //Return the list of all the clients
@@ -10,7 +10,7 @@ export const ClientList = async() => {
     }catch(error) {
         console.log('TheError: '+ error)
     }
-}
+};
 
 export const RutesList = async() => {
     //Return the list of all the clients
@@ -22,7 +22,7 @@ export const RutesList = async() => {
     }catch(error) {
         console.log('TheError: '+ error)
     }
-}
+};
 
 export const AdvisorsList = async() => {
     //Return the list of all the clients
@@ -34,7 +34,7 @@ export const AdvisorsList = async() => {
     }catch(error) {
         console.log('TheError: '+ error)
     }
-}
+};
 
 export const SupplierListApi = async() => {
     //Return the list of all the clients
@@ -46,7 +46,7 @@ export const SupplierListApi = async() => {
     }catch(error) {
         console.log('TheError: '+ error)
     }
-}
+};
 
 export const WorkerListApi = async() => {
     //Return the list of all the clients
@@ -58,7 +58,7 @@ export const WorkerListApi = async() => {
     }catch(error) {
         console.log('TheError: '+ error)
     }
-}
+};
 
 export const CategoryListApi = async() => {
     //Return the list of all the clients
@@ -70,7 +70,7 @@ export const CategoryListApi = async() => {
     }catch(error) {
         console.log('TheError: '+ error)
     }
-}
+};
 
 export const newCategoryApi = async(categoryData) => {
     //Return the list of all the clients
@@ -84,7 +84,7 @@ export const newCategoryApi = async(categoryData) => {
     }catch(error) {
         console.log('TheError newCategoryApi: '+ error)
     }
-}
+};
 
 export const updateCategoryApi = async(categoryData) => {
     //Return the list of all the clients
@@ -98,7 +98,21 @@ export const updateCategoryApi = async(categoryData) => {
     }catch(error) {
         console.log('TheError updateCategoryApi: '+ error)
     }
-}
+};
+
+export const deleteCategoryApi = async(categoryData) => {
+    //Return the list of all the clients
+    try {
+        const res = await fetch(`${API_INT}/detelecategory`,{
+            method: 'POST',
+            headers: { Accept: 'application/json','Content-Type': 'application/json'},
+            body: JSON.stringify(categoryData)
+        })
+        return await res.json()
+    }catch(error) {
+        console.log('TheError deleteCategoryApi: '+ error)
+    }
+};
 
 export const SubCategoryListApi = async() => {
     //Return the list of all the clients
@@ -110,8 +124,51 @@ export const SubCategoryListApi = async() => {
     }catch(error) {
         console.log('TheError SubCategoryListApi: '+ error)
     }
+};
+
+//!SubCategory
+export const newSubCategoryApi = async(subCategoryData) => {
+    //Return the list of all the clients
+    try {
+        const res = await fetch(`${API_INT}/newsubcategory`,{
+            method: 'POST',
+            headers: { Accept: 'application/json','Content-Type': 'application/json'},
+            body: JSON.stringify(subCategoryData)
+        })
+        return await res.json()
+    }catch(error) {
+        console.log('TheError newSubCategoryApi: '+ error)
+    }
 }
 
+export const updateSubCategoryApi = async(SubCategoryData) => {
+    //Return the list of all the clients
+    try {
+        const res = await fetch(`${API_INT}/updatesubcategory`,{
+            method: 'POST',
+            headers: { Accept: 'application/json','Content-Type': 'application/json'},
+            body: JSON.stringify(SubCategoryData)
+        })
+        return await res.json()
+    }catch(error) {
+        console.log('TheError updateSubCategoryApi: '+ error)
+    }
+}
+
+export const deleteSubCategoryApi = async(subCategoryData) => {
+    //Return the list of all the clients
+    try {
+        const res = await fetch(`${API_INT}/detelesubcategory`,{
+            method: 'POST',
+            headers: { Accept: 'application/json','Content-Type': 'application/json'},
+            body: JSON.stringify(subCategoryData)
+        })
+        return await res.json()
+    }catch(error) {
+        console.log('TheError deleteCategoryApi: '+ error)
+    }
+}
+//!Product
 export const GetProductListApi = async() => {
     //Return the list of all the clients
     try {
@@ -204,6 +261,7 @@ export const quiantityProductListApi = async() => {
     }
 }
 
+//!Client
 export const newClientApi = async(DataClient) => {
     //Return the list of all the clients
     try {
@@ -259,3 +317,237 @@ export const updSupplierApi = async(DataSupplier) => {
         console.log('TheError updSupplierApi: '+ error)
     }
 }
+
+export const getEntrantsListApi = async() => {
+    //Return the list of all the clients
+    try {
+        const res = await fetch(`${API_INT}/entrantslist`,{
+            method: 'GET'
+        })
+        return await res.json()
+    }catch(error) {
+        console.log('TheError getEntrantsListApi: '+ error)
+    }
+};
+//! Purchase
+export const getPurchaselistApi = async() => {
+    //Return the list of all the clients
+    try {
+        const res = await fetch(`${API_INT}/purchaselist`,{
+            method: 'GET'
+        })
+        return await res.json()
+    }catch(error) {
+        console.log('TheError getPurchaselistApi: '+ error)
+    }
+};
+
+export const EnteredListApi = async() => {
+    //Return the list of all the clients
+    try {
+        const res = await fetch(`${API_INT}/enteredlist`,{
+            method: 'GET'
+        })
+        return await res.json()
+    }catch(error) {
+        console.log('TheError EnteredListApi: '+ error)
+    }
+};
+
+export const NewPurchaseApi = async(updateproductData) => {
+    //Return the list of all the clients
+    try {
+        const res = await fetch(`${API_INT}/newpurchase`,{
+            method: 'POST',
+            headers: { Accept: 'application/json','Content-Type': 'application/json'},
+            body: JSON.stringify(updateproductData)
+        })
+        return await res.json()
+    }catch(error) {
+        console.log('TheError NewPurchaseApi: '+ error)
+    }
+}
+
+export const StatusListApi = async() => {
+    //Return the list of all the clients
+    try {
+        const res = await fetch(`${API_INT}/statuslist`,{
+            method: 'GET'
+        })
+        return await res.json()
+    }catch(error) {
+        console.log('TheError StatusListApi: '+ error)
+    }
+}
+
+export const PPPurchaseApi = async() => {
+    //Return the list of all the clients
+    try {
+        const res = await fetch(`${API_INT}/partialpaymentpurchase`,{
+            method: 'GET'
+        })
+        return await res.json()
+    }catch(error) {
+        console.log('TheError PPPurchaseApi: '+ error)
+    }
+}
+
+export const PPPurchaseDetailApi = async(updateproductData) => {
+    //Return the list of all the clients
+    try {
+        const res = await fetch(`${API_INT}/pppurchase`,{
+            method: 'POST',
+            headers: { Accept: 'application/json','Content-Type': 'application/json'},
+            body: JSON.stringify(updateproductData)
+        })
+        return await res.json()
+    }catch(error) {
+        console.log('TheError PPPurchaseDetailApi: '+ error)
+    }
+}
+
+export const postMakePPApi = async(updateproductData) => {
+    //Return the list of all the clients
+    try {
+        const res = await fetch(`${API_INT}/postmakepp`,{
+            method: 'POST',
+            headers: { Accept: 'application/json','Content-Type': 'application/json'},
+            body: JSON.stringify(updateproductData)
+        })
+        return await res.json()
+    }catch(error) {
+        console.log('TheError postMakePPApi: '+ error)
+    }
+}
+
+export const getPPSalesApi = async() => {
+    //Return the list of all the clients
+    try {
+        const res = await fetch(`${API_INT}/ppsales`,{
+            method: 'GET'
+        })
+        return await res.json()
+    }catch(error) {
+        console.log('TheError StatusListApi: '+ error)
+    }
+};
+
+export const getPPSalesBalancesApi = async() => {
+    //Return the list of all the clients
+    try {
+        const res = await fetch(`${API_INT}/ppsalesbalances`,{
+            method: 'GET'
+        })
+        return await res.json()
+    }catch(error) {
+        console.log('TheError StatusListApi: '+ error)
+    }
+};
+
+export const getCreditNotesApi = async() => {
+    //Return the list of all the clients
+    try {
+        const res = await fetch(`${API_INT}/creditnotes`,{
+            method: 'GET'
+        })
+        return await res.json()
+    }catch(error) {
+        console.log('TheError StatusListApi: '+ error)
+    }
+};
+
+export const getPreparationListApi = async(updateproductData) => {
+    //Return the list of all the clients
+    try {
+        const res = await fetch(`${API_INT}/preparationlist`,{
+            method: 'POST',
+            headers: { Accept: 'application/json','Content-Type': 'application/json'},
+            body: JSON.stringify(updateproductData)
+        })
+        return await res.json()
+    }catch(error) {
+        console.log('TheError getPreparationListApi: '+ error)
+    }
+};
+
+export const postStateFlowApi = async(updateproductData) => {
+    //Return the list of all the clients
+    try {
+        const res = await fetch(`${API_INT}/stateflow`,{
+            method: 'POST',
+            headers: { Accept: 'application/json','Content-Type': 'application/json'},
+            body: JSON.stringify(updateproductData)
+        })
+        return await res.json()
+    }catch(error) {
+        console.log('TheError postStateFlowApi: '+ error)
+    }
+};
+
+export const getPendingListApi = async() => {
+    //Return the list of all the clients
+    try {
+        const res = await fetch(`${API_INT}/pendinglist`,{
+            method: 'GET'
+        })
+        return await res.json()
+    }catch(error) {
+        console.log('TheError getPendingListApi: '+ error)
+    }
+};
+
+export const onTheRouteApi = async(updateproductData) => {
+    //Return the list of all the clients
+    try {
+        const res = await fetch(`${API_INT}/onTheRoute`,{
+            method: 'POST',
+            headers: { Accept: 'application/json','Content-Type': 'application/json'},
+            body: JSON.stringify(updateproductData)
+        })
+        return await res.json()
+    }catch(error) {
+        console.log('TheError onTheRouteApi: '+ error)
+    }
+};
+
+export const getSpecificPurchaseApi = async(updateproductData) => {
+    //Return the list of all the clients
+    try {
+        const res = await fetch(`${API_INT}/specificpurchase`,{
+            method: 'POST',
+            headers: { Accept: 'application/json','Content-Type': 'application/json'},
+            body: JSON.stringify(updateproductData)
+        })
+        return await res.json()
+    }catch(error) {
+        console.log('TheError getSpecificPurchaseApi: '+ error)
+    }
+};
+
+export const getAliasListApi = async(updateproductData) => {
+    //Return the list of all the clients
+    try {
+        const res = await fetch(`${API_INT}/aliaslist`,{
+            method: 'POST',
+            headers: { Accept: 'application/json','Content-Type': 'application/json'},
+            body: JSON.stringify(updateproductData)
+        })
+        return await res.json()
+    }catch(error) {
+        console.log('TheError getAliasListApi: '+ error)
+    }
+};
+
+export const postNewAliasApi = async(updateproductData) => {
+    //Return the list of all the clients
+    try {
+        const res = await fetch(`${API_INT}/newalias`,{
+            method: 'POST',
+            headers: { Accept: 'application/json','Content-Type': 'application/json'},
+            body: JSON.stringify(updateproductData)
+        })
+        return await res.json()
+    }catch(error) {
+        console.log('TheError postNewAliasApi: '+ error)
+    }
+};

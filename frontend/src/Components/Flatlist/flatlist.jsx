@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './_flatlist.scss';
 
 export const Flatlist = ({ data,
@@ -20,6 +20,9 @@ export const Flatlist = ({ data,
     //const [width, setWidth] = useState(Width);
     //const [height, setHeight] = useState(Height);
     const [columnsWidth, setColumnsWidth] = useState([]);
+    const [visibleCount, setVisibleCount] = useState(100)
+    const scrollRef = useRef(null);
+
 
     useEffect(() => {
         if (headers.length > 0) {
@@ -52,12 +55,34 @@ export const Flatlist = ({ data,
         }
     };
 
+    useEffect(() => {
+        const el = scrollRef.current;
+        if (!el) return;
+
+        const handleScroll = () => {
+            const isBottom = el.scrollHeight - el.scrollTop <= el.clientHeight + 1;
+            if (isBottom) {
+                const addRows = visibleCount + 50 < data.length ? visibleCount + 50 : data.length
+                setVisibleCount(addRows)
+            }
+        };
+
+        el.addEventListener('scroll', handleScroll);
+        return () => el.removeEventListener('scroll', handleScroll);
+    }, [visibleCount, data.length]);
+
     return (
         <div 
+            ref={scrollRef}    
             className='Flatlist'
             id='FlastListID'
             tabIndex={0}
-            style={{height: Height, maxHeight: maxHeight, overflowY: 'auto' }}
+            style={{
+                height: Height,
+                width: Width,
+                maxHeight: maxHeight,
+                overflowY: 'auto'
+            }}
             onKeyDown={handleKeyDown}
             >
             <table className='theTable' style={{ tableLayout: 'fixed', width: '100%' }}>
@@ -78,7 +103,7 @@ export const Flatlist = ({ data,
                     </tr>
                 </thead>
                 <tbody>
-                    {data && data.length > 0 && (data.map((item, index) => {
+                    {data && data.length > 0 && (data.slice(0, visibleCount).map((item, index) => {
                         // Determina el color de fondo basado en si el índice es par o impar
                         let currentBackgroundColor = 'inherit';
                         if (rowStyles === 'alternative'){
@@ -97,7 +122,6 @@ export const Flatlist = ({ data,
                             >
                                 {row(item, index, columnsWidth)}
                             </tr>
-
                         )
                     }))}
                 </tbody>

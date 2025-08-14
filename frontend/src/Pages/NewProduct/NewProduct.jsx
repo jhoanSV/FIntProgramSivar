@@ -8,7 +8,7 @@ import { SubCategoryListApi,
         ClasesListApi } from '../../api';
 import { TheAlert } from '../../Components';
 import { ListBox } from '../../Components/ListBox';
-import { PagePosition, AddTo } from '../../Components/Modals';
+import { PagePosition, AddTo, Alias } from '../../Components/Modals';
 import "./_NewProduct.scss";
 import { useTheContext } from '../../TheProvider';
 import imgPlaceHolder from '../../Assets/AVIF/placeHolderProduct.avif'
@@ -16,7 +16,7 @@ import imgPlaceHolder from '../../Assets/AVIF/placeHolderProduct.avif'
 export function NewProduct(){
     const [selectedfila, setSelectedfila] = useState(0);
     const [focusFlatlist, setFocusFlatlist] = useState(false);
-    const [showAddto, setsShowAddto] = useState(true);
+    const [showAddto, setsShowAddto] = useState(false);
     const [exist, setExist] = useState(false);
     const { usD } = useTheContext()
     const [otherSupplierList, setOtherSupplierList ] = useState([
@@ -38,6 +38,7 @@ export function NewProduct(){
     const [productList, setProductList] = useState([]);
     const [supplier, setSupplier] = useState([]);
     const [clases, setClases] = useState([]);
+    const [showAlias,setShowAlias] = useState(false)
     const [dataProduct, setDataProduct] = useState(
         {
             'Consecutivo': '',
@@ -84,23 +85,24 @@ export function NewProduct(){
       prodList.current = productL
     };
 
-    useEffect(() => {
-        const GetSubCategoryL =async()=>{
+    const GetSubCategoryL =async()=>{
         const SubCategoryL = await SubCategoryListApi()
         setSubCategoryList(SubCategoryL)
         refList.current = SubCategoryL
-        }
+    };
+
+    useEffect(() => {
 
         const GetSupplierL =async()=>{
-        const supplierL = await SupplierListApi()
-        setSupplier(supplierL)
-        suppList.current = supplierL
+            const supplierL = await SupplierListApi()
+            setSupplier(supplierL)
+            suppList.current = supplierL
         }
 
         const GetClasesL = async()=>{
-        const clasesL = await ClasesListApi()
-        setClases(clasesL)
-        clasesList.current = clasesL
+            const clasesL = await ClasesListApi()
+            setClases(clasesL)
+            clasesList.current = clasesL
         }
         GetClasesL()
         GetProductL()
@@ -266,7 +268,7 @@ export function NewProduct(){
                             if (selectedOption){
                                 handleDataOSuppier(index, 'Proveedor' , selectedOption.Proovedor)
                             } else {
-                                TheAlert("No se encuentra el proveedor con dodigo " + item.CodP)
+                                TheAlert("No se encuentra el proveedor con código " + item.CodP)
                             }
                         }
                     }}
@@ -325,8 +327,18 @@ export function NewProduct(){
     };
 
     const updatedProduct = async()=>{
-        const upProduct = await postUpdateProductApi(dataProduct)
-        cancelProduct()
+        const UpdateProductData = {...dataProduct}
+        // Crea una nueva lista SIN el último elemento
+        const newOtherSuppliers = otherSupplierList.slice(0, -1);
+        UpdateProductData.otrosProveedores = newOtherSuppliers
+        const upProduct = await postUpdateProductApi(UpdateProductData)
+        if (upProduct.sucess === true){
+            TheAlert('El producto se actualizó con exito')
+            GetProductL()
+            cancelProduct()
+        } else if (upProduct.sucess === false){
+            TheAlert('Ocurrio un error al modificar el producto, error: ', upProduct.error)
+        }
     };
 
     const NewProduct = async()=>{
@@ -349,12 +361,11 @@ export function NewProduct(){
                     dataProduct.CoordenadaY !== ''
                 )
             ) {
-                const NewProductData = [...dataProduct]
+                const NewProductData = {...dataProduct}
                 NewProductData.CodResponsable = usD.Cod
                 NewProductData.Responsable = usD.Nombre + ' ' + usD.Apellido
                 NewProductData.Fecha = Date.now()
                 NewProductData.otrosProveedores = otherSupplierList.pop()
-                console.log('NewProductData: ', NewProductData)
             } else {
                 TheAlert('Se deben completar los datos de posición en la página')
                 return;
@@ -412,8 +423,13 @@ export function NewProduct(){
 
     return (
         <div>
-            <button>Impuesto</button>
-            <button>Paquete</button>
+            <button
+                className='btnStnd btn1'
+                style={{marginLeft: '20px'}}
+                onClick={()=>{setsShowAddto(true)}}
+            >
+                Añadir a tablas
+            </button>
             <button
                 className='btnStnd btn1'
                 style={{marginLeft: '20px'}}
@@ -421,6 +437,14 @@ export function NewProduct(){
                 onClick={()=>{setShowPagePosition(true)}}
             >
                 Asignar página
+            </button>
+            <button
+                className='btnStnd btn1'
+                style={{marginLeft: '20px'}}
+                disabled={dataProduct.Cod === ''}
+                onClick={()=>{setShowAlias(true)}}
+            >
+                Añadir un alias
             </button>
 
             <div style={{marginBottom: '3px'}}>
@@ -578,9 +602,25 @@ export function NewProduct(){
                     </div>
                     <div className='Row' style={{marginBottom: '3px'}}>
                         <div className='_column1Customer'>
+                            <label>Grupo</label>
+                        </div>
+                        <div className='_column2Customer'>
+                            <input
+                                type="number"
+                                className=""
+                                value={dataProduct.Grupo}
+                                onChange={(e)=>{handleData('Grupo', e.target.value)}}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div className='_columnNewProduct'>
+                    <div className='Row' style={{marginBottom: '3px'}}>
+                        <div className='_column1Customer'>
                             <label>P. Venta Contado</label>
                         </div>
-                        <div>
+                        <div className='_column2Customer'>
                             <input
                                 type="number"
                                 className=""
@@ -596,7 +636,7 @@ export function NewProduct(){
                                     }
                                 }}
                             />
-                            <label>%</label>
+                            <label style={{'width': '10%'}}>%</label>
                             <input
                                 type="number"
                                 min="0"
@@ -614,14 +654,11 @@ export function NewProduct(){
                             />
                         </div>
                     </div>
-                </div>
-
-                <div className='_columnNewProduct'>
                     <div className='Row' style={{marginBottom: '3px'}}>
                         <div className='_column1Customer'>
                             <label>P. Venta crédito</label>
                         </div>
-                        <div>
+                        <div className='_column1Customer'>
                             <input
                                 type="number"
                                 min="0"
@@ -637,7 +674,7 @@ export function NewProduct(){
                                     }
                                 }}
                             />
-                            <label>%</label>
+                            <label style={{'width': '10%'}} >%</label>
                             <input
                                 type="number"
                                 min="0"
@@ -659,7 +696,7 @@ export function NewProduct(){
                         <div className='_column1Customer'>
                             <label>P. Distribuidor</label>
                         </div>
-                        <div>
+                        <div className='_column2Customer'>
                             <input
                                 type="number"
                                 min="0"
@@ -675,7 +712,7 @@ export function NewProduct(){
                                     }
                                 }}
                             />
-                            <label>%</label>
+                            <label style={{'width': '10%'}}>%</label>
                             <input
                                 type="number"
                                 min="0"
@@ -697,7 +734,7 @@ export function NewProduct(){
                         <div className='_column1Customer'>
                             <label>Ubicación</label>
                         </div>
-                        <div>
+                        <div className='_column2Customer'>
                             <input
                                 type="text"
                                 className=""
@@ -710,7 +747,7 @@ export function NewProduct(){
                         <div className='_column1Customer'>
                             <label>Cantidad</label>
                         </div>
-                        <div>
+                        <div className='_column2Customer'>
                             <input
                                 type="number"
                                 className=""
@@ -723,7 +760,7 @@ export function NewProduct(){
                         <div className='_column1Customer'>
                             <label>Minimo</label>
                         </div>
-                        <div>
+                        <div className='_column2Customer'>
                             <input
                                 type="number"
                                 className=""
@@ -736,7 +773,7 @@ export function NewProduct(){
                         <div className='_column1Customer'>
                             <label>Maximo</label>
                         </div>
-                        <div>
+                        <div className='_column2Customer'>
                             <input
                                 type="number"
                                 className=""
@@ -752,7 +789,7 @@ export function NewProduct(){
                         <div className='_column1Customer'>
                             <label>Iva</label>
                         </div>
-                        <div>
+                        <div className='_column2Customer'>
                             <input
                                 type="number"
                                 className=""
@@ -765,7 +802,7 @@ export function NewProduct(){
                         <div className='_column1Customer'>
                             <label>Agotado</label>
                         </div>
-                        <div>
+                        <div className='_column2Customer'>
                             <input
                                 type="checkbox"
                                 className=""
@@ -778,7 +815,7 @@ export function NewProduct(){
                         <div className='_column1Customer'>
                             <label>Disponible</label>
                         </div>
-                        <div>
+                        <div className='_column2Customer'>
                             <label>{dataProduct.Disponible}</label>
                         </div>
                     </div>
@@ -786,7 +823,7 @@ export function NewProduct(){
                         <div className='_column1Customer'>
                             <label>SVenta</label>
                         </div>
-                        <div>
+                        <div className='_column2Customer'>
                             <input
                                 type="checkbox"
                                 className=""
@@ -799,7 +836,7 @@ export function NewProduct(){
                         <div className='_column1Customer'>
                             <label>Clase</label>
                         </div>
-                        <div>
+                        <div className='_column2Customer'>
                             <select
                                 id="mi-select"
                                 value={dataProduct.Proveedor}
@@ -830,7 +867,7 @@ export function NewProduct(){
                         <div className='_column1Customer'>
                             <label>Img Nombre</label>
                         </div>
-                        <div>
+                        <div className='_column2Customer'>
                             <input
                                 type="text"
                                 className=""
@@ -845,7 +882,7 @@ export function NewProduct(){
                         <div className='_column1Customer'>
                             <label>Página</label>
                         </div>
-                        <div>
+                        <div className='_column2Customer'>
                             <input
                                 type="number"
                                 className=""
@@ -858,7 +895,7 @@ export function NewProduct(){
                         <div className='_column1Customer'>
                             <label>Coordenada-x</label>
                         </div>
-                        <div>
+                        <div className='_column2Customer'>
                             <input
                                 type="number"
                                 className=""
@@ -871,25 +908,12 @@ export function NewProduct(){
                         <div className='_column1Customer'>
                             <label>Coordenada-y</label>
                         </div>
-                        <div>
+                        <div className='_column2Customer'>
                             <input
                                 type="number"
                                 className=""
                                 value={dataProduct.CoordenadaY}
                                 onChange={(e)=>{handleData('CoordenadaY', e.target.value)}}
-                            />
-                        </div>
-                    </div>
-                    <div className='Row' style={{marginBottom: '3px'}}>
-                        <div className='_column1Customer'>
-                            <label>Grupo</label>
-                        </div>
-                        <div>
-                            <input
-                                type="number"
-                                className=""
-                                value={dataProduct.Grupo}
-                                onChange={(e)=>{handleData('Grupo', e.target.value)}}
                             />
                         </div>
                     </div>
@@ -1017,7 +1041,10 @@ export function NewProduct(){
                 />
             }
             {showAddto && 
-                <AddTo/>
+                <AddTo show={setsShowAddto} action={GetSubCategoryL}/>
+            }
+            {showAlias &&
+                <Alias show={setShowAlias} Cod={dataProduct.Cod}/>
             }
         </div>
     );

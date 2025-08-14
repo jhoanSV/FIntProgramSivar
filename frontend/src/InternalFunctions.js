@@ -1,5 +1,7 @@
 import { DotProduct } from './App';
 import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
 
 export const VerifyCodNit = (value) =>{
     const WeightDian = [71,67,59,53,47,43,41,37,29,23,19,17,13,7,3]
@@ -72,3 +74,102 @@ export const toRealExcel = (ourData, fileName = 'file.xlsx') => {
     // Escribe y descarga el archivo
     XLSX.writeFile(workbook, fileName);
 };
+
+
+
+export function priceValue(valor) {
+    /*if (!valor) return ''
+    let TheValue = String(valor)
+    const numberfromat = Number(TheValue.replace(/,/g, '.'));*/
+    return new Intl.NumberFormat('es-CO').format(valor);
+}
+
+export function dateFormat(dateInput) {
+    const isoDate = dateInput;
+    const date = new Date(isoDate);
+
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+
+    const formatted = `${day}/${month}/${year}`;
+    return formatted
+};
+
+export function dateFormatSend() {
+  
+  return
+}
+
+export function calcularDiferenciaDias (fechaInicial, fechaFinal) {
+    const fechaInicio = new Date(fechaInicial); // viene del input tipo "2025-06-21"
+    const fechaActual = new Date(fechaFinal); // hoy
+    // Limpiamos la hora para que solo compare fechas, no horas
+    fechaInicio.setHours(0, 0, 0, 0);
+    fechaActual.setHours(0, 0, 0, 0);
+
+    const diferenciaMs = fechaActual - fechaInicio;
+    const dias = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24));
+
+    return dias;
+};
+
+export const formatDateForInput = (date) => {
+    return date.toISOString().split('T')[0]; // '2025-07-15'
+};
+
+export const toStyledExcel = async (
+  data,
+  fileName = 'file.xlsx',
+  headers = null,
+  condition = null
+) => {
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet('Hoja1');
+
+  if (headers !== null) {
+    worksheet.columns = headers.map((item) => ({
+      header: item.header,
+      key: item.key,
+      width: 20,
+    }));
+  }
+
+  // Añadir filas
+  data.forEach((row) => {
+    worksheet.addRow(row);
+  });
+
+  // Aplicar estilos condicionales a toda la fila
+  if (condition !== null) {
+    worksheet.eachRow((row, rowNumber) => {
+      // Saltar encabezado si existe
+      if (headers !== null && rowNumber === 1) return;
+
+      let cellToCheck;
+
+      if (headers !== null) {
+        // Buscar columna por nombre (key)
+        const colIndex = headers.findIndex(h => h.key === condition[0]) + 1;
+        cellToCheck = row.getCell(colIndex);
+      } else {
+        // Usar número de columna (empezando desde 1)
+        cellToCheck = row.getCell(Number(condition[0]));
+      }
+
+      if (cellToCheck && cellToCheck.value === condition[1]) {
+        row.eachCell((cell) => {
+          cell.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'FFFF00' } // amarillo
+          };
+        });
+      }
+    });
+  }
+
+  const buffer = await workbook.xlsx.writeBuffer();
+  saveAs(new Blob([buffer]), fileName);
+};
+

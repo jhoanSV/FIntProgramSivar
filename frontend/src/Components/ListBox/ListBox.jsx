@@ -100,7 +100,7 @@ export const ListBox = ({ Value,
                     }}
                     onBlur={()=>{isEditingRef.current=false;setShowFL(false)}}
                     autoComplete='off'
-                    autoFocus
+                    //autoFocus
                 />
                 <CSSTransition
                     timeout={200}

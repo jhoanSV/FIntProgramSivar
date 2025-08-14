@@ -46,31 +46,31 @@ export function Newsupplier(){
         {
             header: 'Cod',
             key: 'cod',
-            defaultWidth: 50,
+            defaultWidth: '10%',
             type: 'text',
         },
         {
             header: 'Proveedor',
             key: 'ferreteria',
-            defaultWidth: 300,
+            defaultWidth: '40%',
             type: 'text',
         },
         {
             header: 'Contacto',
             key: 'contacto',
-            defaultWidth: 300,
+            defaultWidth: '30%',
             type: 'text',
         },
         {
             header: 'Cel',
             key: 'cel',
-            defaultWidth: 50,
+            defaultWidth: '20%',
             type: 'text',
         },
         {
             header: 'Email',
             key: 'email',
-            defaultWidth: 50,
+            defaultWidth: '55%',
             type: 'text',
         }
     ];
@@ -102,22 +102,22 @@ export function Newsupplier(){
                     {item.Cod}
                 </label>
             </td>
-            <td onDoubleClick={()=>{FillData()}}>
+            <td onDoubleClick={()=>{FillData()}} style={{width: '100%'}}>
                 <label>
                     {item.Proovedor}
                 </label>
             </td>
-            <td onDoubleClick={()=>{FillData()}}>
+            <td onDoubleClick={()=>{FillData()}} style={{width: '100%'}}>
                 <label>
                     {item.Contacto}
                 </label>
             </td>
-            <td onDoubleClick={()=>{FillData()}}>
+            <td onDoubleClick={()=>{FillData()}} style={{width: '100%'}}>
                 <label>
                     {item.Telefono}
                 </label>
             </td>
-            <td onDoubleClick={()=>{FillData()}}>
+            <td onDoubleClick={()=>{FillData()}} style={{width: '100%'}}>
                 <label>
                     {item.Email}
                 </label>
@@ -175,9 +175,6 @@ export function Newsupplier(){
     }
     useEffect(() => {
         GetSupplierL()
-
-        return () => {
-        }
     }, []);
 
     const newSupplier = async() => {
@@ -394,7 +391,8 @@ export function Newsupplier(){
                         flexDirection: 'column', // Coloca los elementos en columna
                         alignItems: 'center',    // Centra horizontalmente
                         justifyContent: 'center', // Centra verticalmente
-                        height: '50vh'           // Ocupa toda la altura de la ventana
+                        height: '50vh',        // Ocupa toda la altura de la ventana
+                        width: '98%'
                     }}>
                         <Flatlist
                             data={supplierList}

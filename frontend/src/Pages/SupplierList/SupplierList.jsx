@@ -35,13 +35,13 @@ export function SupplierList(){
         {
             header: 'Nit/CC',
             key: 'nitCc',
-            defaultWidth: 400,
+            defaultWidth: 100,
             type: 'text',
         },
         {
             header: 'Proovedor',
             key: 'Proovedor',
-            defaultWidth: 150,
+            defaultWidth: 200,
             type: 'text',
         },
         {
@@ -53,13 +53,13 @@ export function SupplierList(){
         {
             header: 'Celular',
             key: 'celular',
-            defaultWidth: 200,
+            defaultWidth: 100,
             type: 'text',
         },
         {
             header: 'Telefono',
             key: 'telefono',
-            defaultWidth: 200,
+            defaultWidth: 100,
             type: 'text',
         },
         {
@@ -206,14 +206,14 @@ export function SupplierList(){
                 flexDirection: 'column', // Coloca los elementos en columna
                 alignItems: 'center',    // Centra horizontalmente
                 justifyContent: 'center', // Centra verticalmente
-                height: '80%',           // Ocupa toda la altura de la ventana
+                height: '85vh',           // Ocupa toda la altura de la ventana
                 width: '98%'
             }}>
                 <Flatlist
                     data={lista}
                     headers={CustomerHeader}
                     row={RowOrder}
-                    Height={'50%'}
+                    Height={'100%'}
                     selectedRow={selectedfila}
                     setSelectedRow={setSelectedfila}
                     rowStyles='alternative'

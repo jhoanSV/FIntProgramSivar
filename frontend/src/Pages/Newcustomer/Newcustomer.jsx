@@ -22,6 +22,11 @@ export function Newcustomer(){
         label,
         value
     }));
+
+    const GetResFiscalName = (resFiscal) => {
+        const entry = Object.entries(ResFiscalData).find(([key, value]) => value === resFiscal);
+        return entry ? entry[0] : ''; // Devuelve la key si la encuentra, o null si no.
+    };
     const [dataCustomer, setDataCustomer] = useState({
         'Cod':'',
         'TDocumento': '',
@@ -94,7 +99,6 @@ export function Newcustomer(){
             const selectedOption = ResFiscalOptions.find(
                                         (option) => option.value === data.ResFiscal
                                     );
-            console.log(data)
             const NewData = {
                 'Cod': data.Cod,
                 'TDocumento': data.Tipo === 0? 'Cedula': 'Nit',
@@ -107,7 +111,7 @@ export function Newcustomer(){
                 'Email': data.Email,
                 'Direccion': data.Direccion,
                 'Barrio': data.Barrio,
-                'CodRuta': data.Ruta,
+                'CodRuta': data.CodRuta,
                 'NameRuta': data.nombreRuta,
                 'CodVendedor': data.CodVendedor,
                 'NameVendedor': data.Vendedor,
@@ -115,8 +119,8 @@ export function Newcustomer(){
                 'Estado': data.Estado,
                 'Iva': data.Iva,
                 'Pos': data.Pos,
-                'ResFiscalName': data.ResFiscal,
-                'ResFiscal': data.ResFiscal !== ''? selectedOption.label: '',
+                'ResFiscalName': data.ResFiscal !== ''? GetResFiscalName(data.ResFiscal): '',
+                'ResFiscal': data.ResFiscal,
                 'NResolucion': data.NumeroResolucion,
                 'FInicio': data.FechaInicio,
                 'FFinal': data.FechaFinal,
@@ -127,11 +131,12 @@ export function Newcustomer(){
                 'Api': data.Api,
                 'Usuario': data.Usuario,
                 'Clave': data.Clave,
-                'Nota': '',
+                'Nota': data.Nota,
                 'ElectronicPos': data.ElectronicPos
             }
         setDataCustomer(NewData)
-        }
+        };
+        
         return (
         <>
             <td onDoubleClick={()=>{FillData(item)}}>
@@ -163,12 +168,13 @@ export function Newcustomer(){
         );
     };
 
+    const GetClientL =async()=>{
+      const ClientL = await ClientList()
+      setCustomerList(ClientL)
+      refList.current = ClientL
+    }
+
     useEffect(() => {
-      const GetClientL =async()=>{
-        const ClientL = await ClientList()
-        setCustomerList(ClientL)
-        refList.current = ClientL
-      }
 
       const getRoutesList = async()=>{
         const RList = await RutesList()
@@ -231,31 +237,31 @@ export function Newcustomer(){
         {
             header: 'Cod',
             key: 'cod',
-            defaultWidth: 50,
+            defaultWidth: '10%',
             type: 'text',
         },
         {
             header: 'Ferreteria',
             key: 'ferreteria',
-            defaultWidth: 300,
+            defaultWidth: '35%',
             type: 'text',
         },
         {
             header: 'Contacto',
             key: 'contacto',
-            defaultWidth: 300,
+            defaultWidth: '30%',
             type: 'text',
         },
         {
             header: 'Cel',
             key: 'cel',
-            defaultWidth: 50,
+            defaultWidth: '20%',
             type: 'text',
         },
         {
             header: 'Email',
             key: 'email',
-            defaultWidth: 50,
+            defaultWidth: '50%',
             type: 'text',
         }
     ];
@@ -320,6 +326,7 @@ export function Newcustomer(){
                         console.log(sucess.sucess)
                         if (sucess.sucess) {
                             TheAlert('Cliente creado con exito')
+                            GetClientL()
                             Cancel()
                         } else {
                             TheAlert('Error al clear cliente: ', sucess.error)
@@ -331,6 +338,7 @@ export function Newcustomer(){
                     console.log(sucess.sucess)
                     if (sucess.sucess) {
                         TheAlert('Cliente creado con exito')
+                        GetClientL()
                         Cancel()
                     } else {
                         TheAlert('Error al clear cliente: ', sucess.error)
@@ -341,22 +349,22 @@ export function Newcustomer(){
     };
 
     const updateCustomer = async() =>{
-        if (dataCustomer.ElectronicPos){
-            const camposRequeridos = ['TDocumento','NitCC','Ferreteria','Contacto','Telefono','Email','Direccion','CodVendedor','ResFiscal'];
-            const camposFaltantes = verificarCamposVacios(camposRequeridos);
-            if ( camposFaltantes.length > 0) {
-                TheAlert('falta el campo ', camposFaltantes[0], ' para poder actualizar al cliente con Factura electrónica Pos.' )
-            } else {
-                const updateCus = await updateClientApi(dataCustomer)
-                if (updateCus.sucess) {
-                    TheAlert('Cliente actualizado con exito')
-                    Cancel()
-                } else if (updateCus.sucess) {
-                    TheAlert('Error al actualizar el cliente ', updateCus.error)
-                }
+        const camposRequeridos = ['TDocumento','NitCC','Ferreteria','Contacto','Telefono','Email','Direccion','CodVendedor','ResFiscal'];
+        const camposFaltantes = verificarCamposVacios(camposRequeridos);
+        if ( camposFaltantes.length > 0) {
+            TheAlert('falta el campo ', camposFaltantes[0], ' para poder actualizar al cliente con Factura electrónica Pos.' )
+        } else {
+            const updateCus = await updateClientApi(dataCustomer)
+            console.log('updateCus', updateCus)
+            if (updateCus.sucess) {
+                TheAlert('Cliente actualizado con exito')
+                GetClientL()
+                Cancel()
+            } else if (updateCus.sucess) {
+                TheAlert('Error al actualizar el cliente ', updateCus.error)
             }
         }
-    }
+    };
 
     return (
         <div className="_DataInputs" style={{margin: '10px'}}>
@@ -667,8 +675,9 @@ export function Newcustomer(){
                             <input
                                 type="checkbox"
                                 className=""
+                                checked={dataCustomer.Pos === 1}
                                 onChange={(e)=>{
-                                    handleData('Pos', e.target.checked); handleData('ElectronicPos', false)
+                                    handleData('Pos', e.target.checked ? 1 : 0); handleData('ElectronicPos', false)
                                 }}
                             />
                         </div>
@@ -683,7 +692,8 @@ export function Newcustomer(){
                                     <input
                                         type="checkbox"
                                         className=""
-                                        onChange={(e)=>{handleData('ElectronicPos', e.target.checked)}}
+                                        checked={dataCustomer.ElectronicPos === 1}
+                                        onChange={(e)=>{handleData('ElectronicPos', e.target.checked ? 1 : 0)}}
                                     />
                                 </div>
                             </div>

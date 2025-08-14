@@ -17,7 +17,7 @@ export function SearhProduct( {list, ProductSelectedFunction, show, setOtherSupp
         {
             header: 'Cod',
             key: 'cod',
-            defaultWidth: 50,
+            defaultWidth: 100,
             type: 'text',
         },
         {
@@ -105,7 +105,7 @@ export function SearhProduct( {list, ProductSelectedFunction, show, setOtherSupp
                 CoordenadaY: item.CoordenadaY,
                 Nota: item.Nota,
                 Detalle: item.Detalle,
-                Grupo: '',
+                Grupo: item.Grupo
                 };
                 ProductSelectedFunction(proData);
                 show(false)
@@ -215,13 +215,13 @@ export function SearhProduct( {list, ProductSelectedFunction, show, setOtherSupp
                             flexDirection: 'column', // Coloca los elementos en columna
                             alignItems: 'center',    // Centra horizontalmente
                             justifyContent: 'center', // Centra verticalmente
-                            height: '300px'           // Ocupa toda la altura de la ventana
+                            height: '65vh'           // Ocupa toda la altura de la ventana
                         }}>
                             <Flatlist
                                 data={lista}
                                 headers={productHeader}
                                 row={RowOrder}
-                                Height={'300px'}
+                                Height={'100%'}
                                 selectedRow={selectedfila}
                                 setSelectedRow={setSelectedfila}
                                 rowStyles='alternative'

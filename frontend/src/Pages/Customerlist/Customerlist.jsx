@@ -35,7 +35,7 @@ export function Customerlist(){
         {
             header: 'Nit/CC',
             key: 'nitCc',
-            defaultWidth: 400,
+            defaultWidth: 100,
             type: 'text',
         },
         {
@@ -65,7 +65,7 @@ export function Customerlist(){
         {
             header: 'Email',
             key: 'email',
-            defaultWidth: 200,
+            defaultWidth: 250,
             type: 'text',
         },
         {
@@ -215,14 +215,14 @@ export function Customerlist(){
                 flexDirection: 'column', // Coloca los elementos en columna
                 alignItems: 'center',    // Centra horizontalmente
                 justifyContent: 'center', // Centra verticalmente
-                height: '80%',           // Ocupa toda la altura de la ventana
+                height: '85vh',           // Ocupa toda la altura de la ventana
                 width: '98%'
             }}>
                 <Flatlist
                     data={lista}
                     headers={CustomerHeader}
                     row={RowOrder}
-                    Height={'50%'}
+                    Height={'100%'}
                     selectedRow={selectedfila}
                     setSelectedRow={setSelectedfila}
                     rowStyles='alternative'

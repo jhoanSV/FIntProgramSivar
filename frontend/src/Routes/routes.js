@@ -8,7 +8,15 @@ import {Newcustomer,
         Login,
         PriceList,
         Customerlist,
-        SupplierList
+        SupplierList,
+        ListOfEntrants,
+        PurchaseList,
+        NewSale,
+        Entered,
+        Status,
+        PPSales,
+        CreditNotes,
+        PendingList
 } from "../Pages";
 
 export function RoutesComponent() {
@@ -23,6 +31,14 @@ export function RoutesComponent() {
             <Route path='/Customerlist' element={ <Customerlist/>}/>
             <Route path='/SupplierList' element={ <SupplierList/>}/>
             <Route path='/NewPurchase' element={ <NewPurchase/>}/>
+            <Route path='/ListOfEntrants' element={ <ListOfEntrants/>}/>
+            <Route path='/Purchaselist' element={ <PurchaseList/>}/>
+            <Route path='/NewSale' element={ <NewSale/>}/>
+            <Route path='/Entered' element={ <Entered/>}/>
+            <Route path='/Status' element={ <Status/>}/>
+            <Route path='/ppsales' element={ <PPSales/>}/>
+            <Route path='/creditnotes' element={ <CreditNotes/>}/>
+            <Route path='/PendingList' element={ <PendingList/>}/>
         </Routes>
     );
 }

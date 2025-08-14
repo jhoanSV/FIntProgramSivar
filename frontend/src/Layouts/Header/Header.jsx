@@ -127,11 +127,75 @@ export const Header = () => {
                     />
                     <div className='side-menu'>
                         <div>
-                            <Link to={'/'} id='miventas' className='genLink' onClick={(e)=>{
-                                hideSideBar()
-                            }}>
+                            <Link className='genLink' onClick={(e)=>{
+                                e.currentTarget.classList.toggle('m-open')}}>
                                 VENTAS
+                                <i className="bi bi-caret-right-fill"></i>
                             </Link>
+                            <div className='subm-container'>
+                                <Link to={'/NewSale'} id='minuevaventa' className='genLink' onClick={()=>{
+                                    hideSideBar()
+                                    setSection('Nueva venta')
+                                }}>
+                                    Nueva venta
+                                </Link>
+                                <Link to={'/Entered'} id='miingresados' className='genLink' onClick={()=>{
+                                    hideSideBar()
+                                    setSection('Ingresados')
+                                }}>
+                                    Ingresados
+                                </Link>
+                                <Link to={'/Status'} id='miestados' className='genLink' onClick={()=>{
+                                    hideSideBar()
+                                    setSection('Estados')
+                                }}>
+                                    Estados
+                                </Link>
+                                <Link to={'/ppsales'} id='miabonosdeventas' className='genLink' onClick={()=>{
+                                    hideSideBar()
+                                    setSection('Abonos de ventas')
+                                }}>
+                                    Abonos de ventas
+                                </Link>
+                                <Link to={'/creditnotes'} id='minotasdecrédito' className='genLink' onClick={()=>{
+                                    hideSideBar()
+                                    setSection('Notas de crédito')
+                                }}>
+                                    Notas de crédito
+                                </Link>
+                            </div>
+                        </div>
+                        <div>
+                            <Link className='genLink' onClick={(e)=>{e.currentTarget.classList.toggle('m-open')}}>
+                                COMPRAS
+                                <i className="bi bi-caret-right-fill"></i>
+                            </Link>
+                            <div className='subm-container'>
+                                <Link to={'/NewPurchase'} id='minuevacompra' className='genLink' onClick={()=>{
+                                    hideSideBar()
+                                    setSection('Nueva compra')
+                                }}>
+                                    Nueva compra
+                                </Link>
+                                <Link to={'/ListOfEntrants'} id='milistadeentradas' className='genLink' onClick={()=>{
+                                    hideSideBar()
+                                    setSection('Lista de entradas')
+                                }}>
+                                    Lista de entradas
+                                </Link>
+                                <Link to={'/Purchaselist'} id='milistadecompras' className='genLink' onClick={()=>{
+                                    hideSideBar()
+                                    setSection('Lista de compras')
+                                }}>
+                                    Lista de compras
+                                </Link>
+                                <Link to={'/PendingList'} id='milistadependientes' className='genLink' onClick={()=>{
+                                    hideSideBar()
+                                    setSection('Lista de pendientes')
+                                }}>
+                                    Lista de pendientes
+                                </Link>
+                            </div>
                         </div>
                         <div>
                             <Link className='genLink' onClick={(e)=>{
@@ -217,20 +281,6 @@ export const Header = () => {
                                     setSection('Nuevo colaborador')
                                 }}>
                                     Nuevo
-                                </Link>
-                            </div>
-                        </div>
-                        <div>
-                            <Link className='genLink' onClick={(e)=>{e.currentTarget.classList.toggle('m-open')}}>
-                                COMPRAS
-                                <i className="bi bi-caret-right-fill"></i>
-                            </Link>
-                            <div className='subm-container'>
-                                <Link to={'/NewPurchase'} id='minuevacompra' className='genLink' onClick={()=>{
-                                    hideSideBar()
-                                    setSection('Nueva compra')
-                                }}>
-                                    Nueva compra
                                 </Link>
                             </div>
                         </div>

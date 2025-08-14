@@ -22,6 +22,10 @@ export function PriceList(){
       }
       getProductL()
     }, [])
+
+    useEffect(() => {
+        setLista(refList.current)
+    }, [filter])
     
     const ProductHeader = [
         {
@@ -193,7 +197,7 @@ export function PriceList(){
                     item.Agotado === 1 &&
                     (
                         String(item.Cod).toLowerCase().includes(lowerText) ||
-                        String(item.descripcion).toLowerCase().includes(lowerText)
+                        String(item.Descripcion).toLowerCase().includes(lowerText)
                     )
                 );
             } else if (filter === 'bajoInventario'){
@@ -201,7 +205,7 @@ export function PriceList(){
                     item.Cantidad < item.Minimo &&
                     (
                         String(item.Cod).toLowerCase().includes(lowerText) ||
-                        String(item.descripcion).toLowerCase().includes(lowerText)
+                        String(item.Descripcion).toLowerCase().includes(lowerText)
                     )
                 );
             }
@@ -223,11 +227,11 @@ export function PriceList(){
                     <select
                         id="mi-select"
                         value={filter}
-                        onChange={(e) => {setFilter(e.target.value)}}
+                        onChange={(e) => {setFilter(e.target.value); filterProduct(searchText)}}
                         style={{width: '90%'}}
                     >
                         <option key={'Cod'} value={'Cod'}>Cod</option>
-                        <option key={'descripcion'} value={'descripcion'}>Descripción</option>
+                        <option key={'Descripcion'} value={'Descripcion'}>Descripción</option>
                         <option key={'proveedor'} value={'proveedor'}>Proveedor</option>
                         <option key={'bajoInventario'} value={'bajoInventario'}>Bajo de inventario</option>
                         <option key={'Agotado'} value={'Agotado'}>Agotado</option>
@@ -247,14 +251,14 @@ export function PriceList(){
                 flexDirection: 'column', // Coloca los elementos en columna
                 alignItems: 'center',    // Centra horizontalmente
                 justifyContent: 'center', // Centra verticalmente
-                height: '80%',           // Ocupa toda la altura de la ventana
+                height: '85vh',           // Ocupa toda la altura de la ventana
                 width: '98%'
             }}>
                 <Flatlist
                     data={lista}
                     headers={ProductHeader}
                     row={RowOrder}
-                    Height={'50%'}
+                    Height={'100%'}
                     selectedRow={selectedfila}
                     setSelectedRow={setSelectedfila}
                     rowStyles='alternative'
